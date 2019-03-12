@@ -12,8 +12,22 @@
   firebase.initializeApp(config);
 
   var database = firebase.database();
+  
+  $("#currentTime").append(moment().format("hh:mm A"));
 
+var datetime = null,
+    date = null;
 
+var update = function () {
+  date = moment(new Date())
+  datetime.html(date.format("h:mm:ss a"));
+};
+
+$(document).ready(function(){
+  datetime = $("#currentTime")
+  update();
+  setInterval(update, 1000);
+});
 
   //Button for adding Trains
   $("#add-train-btn").on("click", function(event) {
@@ -64,10 +78,10 @@ console.log("click");
   var trRate = childSnapshot.val().rate;
 
   //train info
-  console.log(trName);
+  /*console.log(trName);
   console.log(trDestination);
   console.log(trStart);
-  console.log(trRate);
+  console.log(trRate);*/
 
   //prettify the train start
 var trStartPretty = moment.unix(trStart).format("HH:mm");
@@ -78,16 +92,16 @@ var trLeft = moment().diff(moment.unix(trStart), "minutes") % trRate;
 var trAway = trRate - trLeft;
 
 //make new row
-var train = $("<td>").append(
+var train = $("<tr>").append(
     $("<td>").text(trName),
     $("<td>").text(trDestination),
-    $("<td>").test(trRate + " min"),
+    $("<td>").text(trRate + " min"),
     $("<td>").text(trStartPretty),
-    $("td>").text(trAway + " min")
+    $("<td>").text(trAway + " min")
 );
 
 // insert new row to table
-$("#new-train-table").prepend(train);
+$("#trTable").append(train);
 console.log(train);
 });
 
